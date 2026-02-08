@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.fileMonitor.dao.FileMonitorDao">
+    <insert id="saveFileMonitor" parameterType="com.example.fileMonitor.modal.FileMonitor">
+        INSERT INTO file_monitor (
+            file_name, file_path, file_size, file_content, file_type,
+            last_modified, status, is_exported, ftp_uploaded, create_time
+        ) VALUE (
+            #{fileName}, #{filePath}, #{fileSize}, #{fileContent}, #{fileType},
+            #{lastModified}, #{status}, #{isExported}, #{ftpUploaded}, #{createTime}
+        )
+    </insert>
+
+    <update id="markAsDeleted" parameterType="java.lang.String">
+        UPDATE file_monitor SET status = 'DELETED' WHERE file_path = #{filePath}
+    </update>
+
+    <update id="updateFileContent" parameterType="com.example.fileMonitor.modal.FileMonitor">
+        UPDATE file_monitor SET file_size = #{fileSize}, file_content = #{fileContent}, last_modified = #{lastModified}, update_time = NOW() WHERE file_path = #{filePath}
+    </update>
+
+    <select id="selectNotUploaded" resultType="com.example.fileMonitor.modal.FileMonitor">
+        SELECT
+            id, file_name, file_path, file_size, file_content, file_type,
+            last_modified, status, is_exported, ftp_uploaded, create_time, update_time
+        FROM file_monitor WHERE status = 'ACTIVE' AND ftp_uploaded = 0
+    </select>
+
+    <update id="markAsUploaded" parameterType="java.lang.Long">
+        UPDATE file_monitor SET ftp_uploaded = 1 WHERE id = #{id}
+    </update>
+
+    <select id="selectNotExported" resultType="com.example.fileMonitor.modal.FileMonitor">
+        SELECT
+            id, file_name, file_path, file_size, file_content, file_type,
+            last_modified, status, is_exported, ftp_uploaded, create_time, update_time
+        FROM file_monitor WHERE status = 'ACTIVE' AND is_exported = 0
+    </select>
+
+    <update id="markAsExported" parameterType="java.lang.Long">
+        UPDATE file_monitor SET is_exported = 1 WHERE id = #{id}
+    </update>
+
+    <select id="selectAllActive" resultType="com.example.fileMonitor.modal.FileMonitor">
+        SELECT
+               id, file_name, file_path, file_size, file_content, file_type,
+               last_modified, status, is_exported, ftp_uploaded, create_time, update_time
+        FROM file_monitor WHERE status = 'ACTIVE'
+    </select>
+
+    <select id="selectByFilePath" parameterType="java.lang.String" resultType="com.example.fileMonitor.modal.FileMonitor">
+        SELECT
+            id, file_name, file_path, file_size, file_content, file_type,
+            last_modified, status, is_exported, ftp_uploaded, create_time, update_time
+        FROM file_monitor WHERE file_path = #{filePath} AND status = 'ACTIVE'
+    </select>
+    
+    <select id="countActiveFiles" resultType="int">
+        SELECT COUNT(*) FROM file_monitor WHERE status = 'ACTIVE'
+    </select>
+
+    <select id="countUploadedFiles" resultType="int">
+        SELECT COUNT(*) FROM file_monitor WHERE status = 'ACTIVE' AND ftp_uploaded = 1
+    </select>
+</mapper>

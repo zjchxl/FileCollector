@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.ftp.dao.FtpServiceDao">
+    <select id="selectActiveFtpServer" resultType="com.example.ftp.modal.FtpServer">
+        SELECT
+            id, host, port, user_name, password, remote_dir, is_active, description
+        FROM ftp_server
+    </select>
+</mapper>

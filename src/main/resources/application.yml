@@ -1,0 +1,36 @@
+# application.yml
+spring:
+  application:
+    name: file-monitor-system
+  profiles:
+    active: dev #默认执行application-dev.yml文件
+  spring:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+server:
+  port: 8080
+
+# 日志配置
+logging:
+  level:
+    com.example: INFO
+  file:
+    name: logs/file-monitor.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# MyBatis配置
+mybatis:
+  mapper-locations: classpath:mybatis/**/*.xml
+  type-aliases-package: com.example.*
+  configuration:
+    map-underscore-to-camel-case: true # 开启驼峰命名转换
+    cache-enabled: true # 开启二级缓存
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 打印SQL日志
+    call-setters-on-nulls: true # 返回null字段

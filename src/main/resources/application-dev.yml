@@ -1,0 +1,48 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/my_database?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&connectTimeout=5000&socketTimeout=30000&useSSL=false&useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 5 #初始化连接数
+      min-idle: 5     # 最小空闲连接数
+      max-active: 20  # 最大活跃连接数
+      max-wait: 60000 # 获取连接等待超时的时间
+      time-between-eviction-runs-millis: 60000 # 间隔多久检测需要关闭的空闲连接
+      min-evictable-idle-time-millis: 300000 # 一个连接在池中最小生存的时间
+      validation-query: SELECT 1 FROM DUAL # 检测连接是否有效的SQL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
+  banner:
+    location: classpath:banner.txt
+
+# 文件监控配置
+file:
+  monitor:
+    path: C:\Users\Administrator\Desktop\FileTest      # 监控目录
+    auto-start: true               # 是否自动启动
+    scan-interval: 1000            # 监控轮询间隔(ms)
+
+# Excel导出配置
+excel:
+  export:
+    path: C:\Users\Administrator\Desktop\FileExcelExport  # 导出文件存放目录
+    auto-upload: true                 # 是否自动上传到FTP
+    schedule:
+      enabled: true                   # 是否启用定时导出
+      cron: "0 0 2 * * ?"            # 每天凌晨2点执行
+      keep-days: 7                    # 保留最近7天的导出文件
+
+# FTP配置
+ftp:
+  retry:
+    max-attempts: 3                  # 最大重试次数
+    delay: 5000                      # 重试延迟(ms)
+  timeout: 30000                     # 连接超时时间(ms)
